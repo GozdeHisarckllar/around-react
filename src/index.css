@@ -12,4 +12,5 @@
 @import url('./blocks/footer/footer.css');
 @import url('./blocks/modal/_opened/modal_opened.css');
 @import url('./blocks/card/__like-btn/_active/card__like-btn_active.css');
+@import url('./blocks/modal/_transition/modal_transition_none.css');
 @import url('./blocks/like-hover/like-hover.css');

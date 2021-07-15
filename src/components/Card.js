@@ -2,6 +2,7 @@ function Card(props) {
   function handleClick() {
     props.onCardClick(props.card);
   }
+  
   return (
    <li className="card">
       <button className={`card__remove-btn ${props.card.owner._id === props.userId ? 'card__remove-btn_visible': ''} hover-effect`} onClick={props.onRemoveBtnClick} aria-label="Remove" type="button"></button>

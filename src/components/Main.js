@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import Card from './Card';
 
@@ -9,7 +9,7 @@ function Main(props) {
   const [cards, setCards] = useState([]);
   const [userId, setUserId] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getUserInfo()
     .then((info) => { 
       setUserName(info.name);
@@ -20,7 +20,7 @@ function Main(props) {
     .catch((err) => console.log(err));
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getInitialCards()
     .then((cardData) => {
       setCards(cardData);

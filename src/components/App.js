@@ -9,12 +9,11 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfileOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlaceOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarOpen] = useState(false);
-  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [isVerifyPopupOpen, setVerifyPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState([]);/*''*/
+  const [selectedCard, setSelectedCard] = useState('');
 
   function handleEditProfileClick() {
-    setEditProfileOpen(true);/*!isEditProfilePopupOpen*/
+    setEditProfileOpen(true);
   }
 
   function handleEditAvatarClick() {
@@ -25,23 +24,22 @@ function App() {
     setAddPlaceOpen(true);
   }
 
-  function handleCardClick(clickedCard) {/*card=>onCardClick={handleCardClick} imagepopup=>isImageOpen={isImagePopupOpen}*/
+  function handleCardClick(clickedCard) {
     setSelectedCard(clickedCard);
-    setImagePopupOpen(true);
-  }/*if popups wouldn't be hidden =>in handles, useState(false) states change with setTrue function => {isTrue && <PopupWithForm/>}*/
-/*inside popupwithform onclick={props.onClose}  <PopupWithForm onClose={closeAllPopups}=>const isClosed = useState(false) =>closePopups(){setClose(true)}*/
+  }
+
   function closeAllPopups() {
-    setEditProfileOpen(false);/*!isPopupClosed*/
+    setEditProfileOpen(false);
     setAddPlaceOpen(false);
     setEditAvatarOpen(false);
-    setImagePopupOpen(false);
-    //setSelectedCard('');
+    setSelectedCard('');
     setVerifyPopupOpen(false);
-  }/*selectedCard && <imagePopup..>  | setSelectedCard(true/'')=>{selectedCard?modal_opened}
-selectedCard? props.card.name}*/
-  function handleRemoveCardClick() {/*Card component*/
+  }
+
+  function handleRemoveCardClick() {
     setVerifyPopupOpen(true);
   }
+
   return (
     <div className="page__container">
       <Header/>
@@ -49,7 +47,7 @@ selectedCard? props.card.name}*/
         onEditProfileClick={handleEditProfileClick}
         onAddPlaceClick={handleAddPlaceClick}
         onEditAvatarClick={handleEditAvatarClick}
-        onCardClick={(card) => handleCardClick(card)}
+        onCardClick={handleCardClick}
         onRemoveBtnClick={handleRemoveCardClick}
       />
       <Footer/>
@@ -85,7 +83,7 @@ selectedCard? props.card.name}*/
           <span className="form__input-error card-link-input-error"></span>
         </label>
       </PopupWithForm>
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}/>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       <PopupWithForm 
         name="change-avatar" 
         title="Change profile picture" 
