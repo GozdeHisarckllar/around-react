@@ -6,22 +6,22 @@ import ImagePopup from './ImagePopup';
 import { useState } from 'react';
 
 function App() {
-  const [isEditProfilePopupOpen, setEditProfileOpen] = useState(false);
-  const [isAddPlacePopupOpen, setAddPlaceOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setEditAvatarOpen] = useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isVerifyPopupOpen, setVerifyPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState('');
+  const [selectedCard, setSelectedCard] = useState(null);
 
   function handleEditProfileClick() {
-    setEditProfileOpen(true);
+    setEditProfilePopupOpen(true);
   }
 
   function handleEditAvatarClick() {
-    setEditAvatarOpen(true);
+    setEditAvatarPopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    setAddPlaceOpen(true);
+    setAddPlacePopupOpen(true);
   }
 
   function handleCardClick(clickedCard) {
@@ -29,10 +29,10 @@ function App() {
   }
 
   function closeAllPopups() {
-    setEditProfileOpen(false);
-    setAddPlaceOpen(false);
-    setEditAvatarOpen(false);
-    setSelectedCard('');
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setEditAvatarPopupOpen(false);
+    setSelectedCard(null);
     setVerifyPopupOpen(false);
   }
 
