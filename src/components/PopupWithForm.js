@@ -4,11 +4,11 @@ function PopupWithForm(props) {
   return (
     <div className={className}>
       <div className="modal__container">
-        <form action="#" className="form" name={props.name}>
+        <form action="#" className="form" name={props.name} onSubmit={props.onSubmit}>
           <fieldset className="form__input-container">
             <legend className="form__caption">{props.title}</legend>
             {props.children}
-            <button type="submit" className="form__button">{props.buttonLabel}</button>
+            <button type="submit" className="form__button">{props.isLoading ? props.loadingButtonlabel : props.buttonLabel}</button>
           </fieldset>
         </form>
         <button onClick={props.onClose} className="modal__close-btn hover-effect" aria-label="Close" type="button"></button>
