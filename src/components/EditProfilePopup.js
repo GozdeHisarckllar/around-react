@@ -5,8 +5,8 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading}) {
   const currentUser = useContext(CurrentUserContext);
 
-  const [name, setName] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   
   function handleNameChange(e) {
     setName(e.target.value);
@@ -32,10 +32,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading}) {
     name="edit-profile" 
     title="Edit profile" 
     buttonLabel="Save"
-    loadingButtonlabel = "Saving..."
+    loadingButtonLabel = "Saving..."
     isOpen={isOpen}
     onClose={onClose}
-    onSubmit={handleSubmit}//isLoading={isLoading} {isLoading ? Saving:Save}
+    onSubmit={handleSubmit}
     isLoading = {isLoading}
     >
       <label className="form__label">

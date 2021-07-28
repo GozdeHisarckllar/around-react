@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
-import api from '../utils/api';
+import { useContext } from 'react';
+//import api from '../utils/api';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
@@ -10,7 +10,7 @@ function Main(props) {
   const [userDescription, setUserDescription] = useState();
   const [userAvatar, setUserAvatar] = useState();
   const [userId, setUserId] = useState();*/
-  const [cards, setCards] = useState([]);
+  //const [cards, setCards] = useState([]);
 
   /*useEffect(() => {
     api.getUserInfo()
@@ -22,7 +22,7 @@ function Main(props) {
     })
     .catch((err) => console.log(err));
   }, []);*/
-  function handleCardLike(card) {
+  /*function handleCardLike(card) {
     const isLiked = card.likes.some((likeInfo) => {
       return likeInfo._id === currentUser._id;
     });
@@ -52,7 +52,7 @@ function Main(props) {
       setCards(cardData);
     })
     .catch((err) => console.log(err));
-  }, []);
+  }, []);*/
 
   return (
     <main className="content">
@@ -69,9 +69,9 @@ function Main(props) {
       </section>
       <section className="cards">
         <ul className="cards__list">
-          {cards.map((card) => (
+          {props.cards.map((card) => (
             <Card key={card._id} card={card} userId={currentUser._id} onCardClick={props.onCardClick} 
-              onCardLike={handleCardLike} onCardDelete={handleCardDelete} onRemoveBtnClick={props.onRemoveBtnClick}/>
+              onCardLike={props.onCardLike} /*onCardDelete={props.onCardDelete}*/ onRemoveBtnClick={props.onRemoveBtnClick}/>
           ))}
         </ul>
       </section>

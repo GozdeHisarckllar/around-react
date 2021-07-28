@@ -15,13 +15,16 @@ function Card(props) {
     props.onCardLike(props.card);
   }
 
-  function handleDeleteClick() {
+  /*function handleDeleteClick() {
     props.onCardDelete(props.card);
-  }
+  }*/
   
+  function handleDeleteClick() {
+    props.onRemoveBtnClick(props.card);
+  }
   return (
    <li className="card">
-      <button className={`card__remove-btn ${isOwn ? 'card__remove-btn_visible': ''} hover-effect`} onClick={() => {props.onRemoveBtnClick(); handleDeleteClick();}} aria-label="Remove" type="button"></button>
+      <button className={`card__remove-btn ${isOwn ? 'card__remove-btn_visible': ''} hover-effect`} onClick={() => {handleDeleteClick();/*props.onRemoveBtnClick(); handleDeleteClick();*/}} aria-label="Remove" type="button"></button>
       <div className="card__image" onClick={handleClick} style={{backgroundImage: `url(${props.card.link})`}}></div>
       <div className="card__info">
         <h2 className="card__title">{props.card.name}</h2>

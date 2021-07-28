@@ -1,22 +1,26 @@
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
+//import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import { useState, useEffect } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import api from '../utils/api';
 import EditAvatarPopup from './EditAvatarPopup';
+import ConfirmationPopup from './ConfirmationPopup';
+import AddPlacePopup from './AddPlacePopup';
 
-
+//setArray([...cards, newCard])
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isVerifyPopupOpen, setVerifyPopupOpen] = useState(false);
+  const [isVerifyPopupOpen, setVerifyPopupOpen] = useState(false);//confirmationpopup
   const [selectedCard, setSelectedCard] = useState(null);
+  const [deletedCard, setDeletedCard] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
 
@@ -54,6 +58,56 @@ function App() {
     })
   }
 
+  function handleAddPlaceSubmit({name, link}) {
+    setLoading(true);
+    api.addNewCard({name, link})
+    .then((newCard) => {
+      setCards([newCard, ...cards]);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      closeAllPopups();
+      setLoading(false);
+    });
+  }
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((likeInfo) => {
+      return likeInfo._id === currentUser._id;
+    });
+
+    api.changeLikeCardStatus(card._id, !isLiked)
+    .then((updatedCard) => {
+      setCards(cards.map((initialCard) => {
+        return initialCard._id === card._id ? updatedCard : initialCard
+      }));
+    })
+    .catch((err) => console.log(err));
+  }
+
+  function handleCardDelete(card) {
+    setLoading(true);
+    api.removeCard(card._id)
+    .then(() => {
+      setCards(cards.filter((initialCard) => {
+        return initialCard._id !== card._id;
+      }))
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      closeAllPopups();
+      setLoading(false);
+    })
+  }
+
+  useEffect(() => {
+    api.getInitialCards()
+    .then((cardData) => {
+      setCards(cardData);
+    })
+    .catch((err) => console.log(err));
+  }, []);
+
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
   }
@@ -78,15 +132,19 @@ function App() {
     setVerifyPopupOpen(false);
   }
 
-  function handleRemoveCardClick() {
+  function handleRemoveCardClick(card) {
     setVerifyPopupOpen(true);
+    setDeletedCard(card);
   }
 
   return (
     <div className="page__container">
       <CurrentUserContext.Provider value={currentUser}>
         <Header/>
-        <Main 
+        <Main
+          cards={cards}
+          onCardLike={handleCardLike}
+          //onCardDelete={handleCardDelete}
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
           onEditAvatarClick={handleEditAvatarClick}
@@ -100,22 +158,12 @@ function App() {
           onUpdateUser={handleUpdateUser}
           isLoading={isLoading}
         />
-        <PopupWithForm 
-          name="add-card" 
-          title="New place" 
-          buttonLabel="Create"
+        <AddPlacePopup 
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-          <label className="form__label">
-            <input type="text" className="form__item form__item_el_card-title" id="card-title-input" name="name" placeholder="Title" maxLength="30" required/>
-            <span className="form__input-error card-title-input-error"></span>
-          </label>
-          <label className="form__label">
-            <input type="url" className="form__item form__item_el_card-link" id="card-link-input" name="link" placeholder="Image URL" required/>
-            <span className="form__input-error card-link-input-error"></span>
-          </label>
-        </PopupWithForm>
+          onAddPlaceSubmit={handleAddPlaceSubmit}
+          isLoading={isLoading}
+        />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <EditAvatarPopup 
           isOpen={isEditAvatarPopupOpen}
@@ -123,12 +171,12 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
           isLoading={isLoading}
         />
-        <PopupWithForm 
-          name="remove-verify" 
-          title="Are you sure?" 
-          buttonLabel="Yes"
+        <ConfirmationPopup 
           isOpen={isVerifyPopupOpen}
           onClose={closeAllPopups}
+          card={deletedCard}
+          onCardDelete={handleCardDelete}
+          isLoading={isLoading}
         />
       </CurrentUserContext.Provider>
     </div>
