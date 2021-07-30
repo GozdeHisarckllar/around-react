@@ -1,6 +1,6 @@
-# Around The U.S.- React Project 
+# Around The U.S. - React Project 
 
-* Project 10 for the [Practicum by Yandex](https://practicum.yandex.com) curriculum.
+* Project 10-11 for the [Practicum by Yandex](https://practicum.yandex.com) curriculum.
 
 * Front-end for the Around the U.S. project/ photo app  using React.
 
@@ -14,6 +14,7 @@
 * Grid
 * BEM methodology
 * Figma
+* Declarative programming
 * Object-oriented programming
 * Asynchronous Programming
 * API

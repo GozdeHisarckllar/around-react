@@ -1,6 +1,6 @@
 function PopupWithForm(props) {
   const className = `modal modal_type_${props.name} ${props.isOpen ? 'modal_opened': ''}`;
-  
+
   return (
     <div className={className}>
       <div className="modal__container">

@@ -1,22 +1,21 @@
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-//import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
-import { useState, useEffect } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
-import api from '../utils/api';
 import EditAvatarPopup from './EditAvatarPopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import AddPlacePopup from './AddPlacePopup';
+import api from '../utils/api';
 
-//setArray([...cards, newCard])
+
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isVerifyPopupOpen, setVerifyPopupOpen] = useState(false);//confirmationpopup
+  const [isConfirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [deletedCard, setDeletedCard] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -129,11 +128,11 @@ function App() {
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
     setSelectedCard(null);
-    setVerifyPopupOpen(false);
+    setConfirmationPopupOpen(false);
   }
 
   function handleRemoveCardClick(card) {
-    setVerifyPopupOpen(true);
+    setConfirmationPopupOpen(true);
     setDeletedCard(card);
   }
 
@@ -144,7 +143,6 @@ function App() {
         <Main
           cards={cards}
           onCardLike={handleCardLike}
-          //onCardDelete={handleCardDelete}
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
           onEditAvatarClick={handleEditAvatarClick}
@@ -172,7 +170,7 @@ function App() {
           isLoading={isLoading}
         />
         <ConfirmationPopup 
-          isOpen={isVerifyPopupOpen}
+          isOpen={isConfirmationPopupOpen}
           onClose={closeAllPopups}
           card={deletedCard}
           onCardDelete={handleCardDelete}

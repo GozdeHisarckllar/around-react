@@ -1,4 +1,5 @@
-import PopupWithForm from "./PopupWithForm";
+import PopupWithForm from './PopupWithForm';
+
 
 function ConfirmationPopup(props) {
 
@@ -13,7 +14,7 @@ function ConfirmationPopup(props) {
       name="remove-verify" 
       title="Are you sure?" 
       buttonLabel="Yes"
-      loadingButtonLabel = "Deleting..."//ButtonLabel
+      loadingButtonLabel = "Deleting..."
       onSubmit={handleSubmit}
       isOpen={props.isOpen}
       onClose={props.onClose}

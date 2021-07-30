@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
-import PopupWithForm from "./PopupWithForm";
+import { useState, useRef } from 'react';
+import PopupWithForm from './PopupWithForm';
+import { handleValidation } from '../utils/utils';
+import { inputElementErrorClassName, errorClassName} from '../utils/constants';
+
 
 function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit, isLoading }) {
   const nameInputElement = useRef();
@@ -11,43 +14,33 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit, isLoading }) {
   const[linkErrorMessage, setLinkErrorMessage] = useState('');
   const[isButtonDisabled, setButtonDisabled] = useState(true);
 
-  const [name, setName] = useState('');
-  const [link, setLink] = useState('');
-
-  function handleNameChange(e) {
-    setName(e.target.value);
-    handleValidation(nameInputElement, setNameValid, setNameErrorMessage);
+  function handleNameChange() {
+    handleValidation(
+      nameInputElement,
+      linkInputElement,
+      setNameValid, 
+      setNameErrorMessage,
+      setButtonDisabled
+    );
   }
 
-  function handleLinkChange(e) {
-    setLink(e.target.value);
-    handleValidation(linkInputElement, setLinkValid, setLinkErrorMessage);
+  function handleLinkChange() {
+    handleValidation(
+      linkInputElement,
+      nameInputElement,
+      setLinkValid, 
+      setLinkErrorMessage,
+      setButtonDisabled
+    );
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onAddPlaceSubmit({name:name, link:link});
-  }
-
-  function handleValidation(element, stateFunc, errorMessageFunc) {
-    if (!element.current.validity.valid) {
-      stateFunc(false);
-      errorMessageFunc(element.current.validationMessage);
-      setButtonDisabled(true);
-      
-    } else {
-      stateFunc(true);
-      errorMessageFunc('');
-      toggleDisabledButton();
-    }
-  }
-
-  function toggleDisabledButton() {
-    if(nameInputElement.current.validity.valid 
-      && linkInputElement.current.validity.valid) {
-        setButtonDisabled(false);
-    };
+    onAddPlaceSubmit({
+      name: nameInputElement.current.value, 
+      link: linkInputElement.current.value
+    });
   }
 
   return(
@@ -63,14 +56,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit, isLoading }) {
       isButtonDisabled={isButtonDisabled}
     >
       <label className="form__label">
-        <input type="text" ref={nameInputElement} className={`form__item form__item_el_card-title ${!isNameValid?'form__item_type_error':''}`} value={name} 
+        <input type="text" ref={nameInputElement} className={`form__item form__item_el_card-title ${!isNameValid? inputElementErrorClassName:''}`}
           onChange={handleNameChange} id="card-title-input" name="name" placeholder="Title" maxLength="30" required/>
-        <span className={`form__input-error card-title-input-error ${!isNameValid?'form__input-error_visible':''}`}>{!isNameValid?nameErrorMessage:''}</span>
+        <span className={`form__input-error card-title-input-error ${!isNameValid? errorClassName:''}`}>{nameErrorMessage}</span>
       </label>
       <label className="form__label">
-        <input type="url" ref={linkInputElement} className={`form__item form__item_el_card-link ${!isLinkValid?'form__item_type_error':''}`} value={link} 
+        <input type="url" ref={linkInputElement} className={`form__item form__item_el_card-link ${!isLinkValid? inputElementErrorClassName:''}`}
           onChange={handleLinkChange} id="card-link-input" name="link" placeholder="Image URL" required/>
-        <span className={`form__input-error card-link-input-error ${!isLinkValid?'form__input-error_visible':''}`}>{!isLinkValid?linkErrorMessage:''}</span>
+        <span className={`form__input-error card-link-input-error ${!isLinkValid? errorClassName:''}`}>{linkErrorMessage}</span>
       </label>
     </PopupWithForm>
   );
