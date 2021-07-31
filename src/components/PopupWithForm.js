@@ -8,8 +8,8 @@ function PopupWithForm(props) {
           <fieldset className="form__input-container">
             <legend className="form__caption">{props.title}</legend>
             {props.children}
-            <button type="submit" className={`form__button ${props.isButtonDisabled?'form__button_disabled':''}`} 
-              disabled={props.isButtonDisabled && true}>{props.isLoading ? props.loadingButtonLabel : props.buttonLabel}</button>
+            <button type="submit" className={`form__button ${!props.isFormValid?'form__button_disabled':''}`} 
+              disabled={!props.isFormValid && true}>{props.isLoading ? props.loadingButtonLabel : props.buttonLabel}</button>
           </fieldset>
         </form>
         <button onClick={props.onClose} className="modal__close-btn hover-effect" aria-label="Close" type="button"></button>

@@ -1,47 +1,28 @@
-import { useState, useRef } from 'react';
+import { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
-import { handleValidation } from '../utils/utils';
 import { inputElementErrorClassName, errorClassName} from '../utils/constants';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 
 function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit, isLoading }) {
-  const nameInputElement = useRef();
-  const linkInputElement = useRef();
-
-  const[isNameValid, setNameValid] = useState(true);
-  const[isLinkValid, setLinkValid] = useState(true);
-  const[nameErrorMessage, setNameErrorMessage] = useState('');
-  const[linkErrorMessage, setLinkErrorMessage] = useState('');
-  const[isButtonDisabled, setButtonDisabled] = useState(true);
-
-  function handleNameChange() {
-    handleValidation(
-      nameInputElement,
-      linkInputElement,
-      setNameValid, 
-      setNameErrorMessage,
-      setButtonDisabled
-    );
-  }
-
-  function handleLinkChange() {
-    handleValidation(
-      linkInputElement,
-      nameInputElement,
-      setLinkValid, 
-      setLinkErrorMessage,
-      setButtonDisabled
-    );
-  }
-
+  const {
+    values, 
+    errors, 
+    isFormValid, 
+    handleChange,
+    setIsFormValid 
+  } = useFormAndValidation();
+  
+  
   function handleSubmit(e) {
     e.preventDefault();
 
-    onAddPlaceSubmit({
-      name: nameInputElement.current.value, 
-      link: linkInputElement.current.value
-    });
+    onAddPlaceSubmit(values);
   }
+
+  useEffect(() => {
+    setIsFormValid(false);
+  },[setIsFormValid]);
 
   return(
     <PopupWithForm 
@@ -53,17 +34,17 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit, isLoading }) {
       onClose={onClose}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      isButtonDisabled={isButtonDisabled}
+      isFormValid={isFormValid}
     >
       <label className="form__label">
-        <input type="text" ref={nameInputElement} className={`form__item form__item_el_card-title ${!isNameValid? inputElementErrorClassName:''}`}
-          onChange={handleNameChange} id="card-title-input" name="name" placeholder="Title" maxLength="30" required/>
-        <span className={`form__input-error card-title-input-error ${!isNameValid? errorClassName:''}`}>{nameErrorMessage}</span>
+        <input type="text" className={`form__item form__item_el_card-title ${errors['name']? inputElementErrorClassName:''}`}
+          value={values['name'] || ''} onChange={handleChange} id="card-title-input" name="name" placeholder="Title" maxLength="30" required/>
+        <span className={`form__input-error card-title-input-error ${errors['name']? errorClassName:''}`}>{errors['name']}</span>
       </label>
       <label className="form__label">
-        <input type="url" ref={linkInputElement} className={`form__item form__item_el_card-link ${!isLinkValid? inputElementErrorClassName:''}`}
-          onChange={handleLinkChange} id="card-link-input" name="link" placeholder="Image URL" required/>
-        <span className={`form__input-error card-link-input-error ${!isLinkValid? errorClassName:''}`}>{linkErrorMessage}</span>
+        <input type="url" className={`form__item form__item_el_card-link ${errors['link']? inputElementErrorClassName:''}`}
+          value={values['link'] || ''} onChange={handleChange} id="card-link-input" name="link" placeholder="Image URL" required/>
+        <span className={`form__input-error card-link-input-error ${errors['link']? errorClassName:''}`}>{errors['link']}</span>
       </label>
     </PopupWithForm>
   );

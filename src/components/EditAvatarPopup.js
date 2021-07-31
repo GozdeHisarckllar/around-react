@@ -1,41 +1,31 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 import { inputElementErrorClassName, errorClassName} from '../utils/constants';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }){
   const currentUser = useContext(CurrentUserContext);
-  const linkInputElement = useRef();
   
-  const [isLinkValid, setLinkValid] = useState(true);
-  const [linkErrorMessage, setLinkErrorMessage] = useState('');
-  const [isButtonDisabled, setButtonDisabled] = useState(true);
+  const {
+    values, 
+    errors, 
+    isFormValid, 
+    handleChange, 
+    resetFormValidation
+  } = useFormAndValidation();
+
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onUpdateAvatar({
-      avatar: linkInputElement.current.value
-    });
-  }
-
-  function handleAvatarLinkValidation() {
-    if (!linkInputElement.current.validity.valid) {
-      setLinkValid(false);
-      setLinkErrorMessage(linkInputElement.current.validationMessage);
-      setButtonDisabled(true);
-    } else {
-      setLinkValid(true);
-      setLinkErrorMessage('');
-      setButtonDisabled(false);
-    }
+    onUpdateAvatar(values);
   }
 
   useEffect(() => {
-    linkInputElement.current.value = '';
-    setButtonDisabled(true);
-  }, [currentUser]);
+    resetFormValidation();
+  }, [currentUser, isOpen, resetFormValidation]);
 
   return(
     <PopupWithForm 
@@ -47,12 +37,12 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }){
       onClose={onClose}
       onSubmit={handleSubmit}
       isLoading={isLoading}
-      isButtonDisabled={isButtonDisabled}
+      isFormValid={isFormValid}
     >
       <label className="form__label">
-        <input type="url" ref={linkInputElement} className={`form__item form__item_el_avatar-link ${!isLinkValid? inputElementErrorClassName:''}`} 
-          onChange={handleAvatarLinkValidation} id="avatar-link-input" name="avatar" placeholder="Picture URL" required/>
-        <span className={`form__input-error avatar-link-input-error ${!isLinkValid? errorClassName:''}`}>{linkErrorMessage}</span>
+        <input type="url" className={`form__item form__item_el_avatar-link ${errors['avatar']? inputElementErrorClassName:''}`} 
+          value={values['avatar'] || ''} onChange={handleChange} id="avatar-link-input" name="avatar" placeholder="Picture URL" required/>
+        <span className={`form__input-error avatar-link-input-error ${errors['avatar']? errorClassName:''}`}>{errors['avatar']}</span>
       </label>
     </PopupWithForm>
   )

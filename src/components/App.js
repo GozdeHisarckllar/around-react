@@ -12,13 +12,13 @@ import api from '../utils/api';
 
 
 function App() {
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isConfirmationPopupOpen, setConfirmationPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [deletedCard, setDeletedCard] = useState(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
@@ -32,41 +32,41 @@ function App() {
   }, []);
 
   function handleUpdateUser({name, about}) {
-    setLoading(true);
+    setIsLoading(true);
     api.setUserProfileInfo({name, about})
     .then((editedInfo) => {
       setCurrentUser(editedInfo);
     })
+    .then(() => closeAllPopups())
     .catch((err) => console.log(err))
     .finally(() => {
-      closeAllPopups();
-      setLoading(false);
+      setIsLoading(false);
     });
   }
 
   function handleUpdateAvatar({avatar}) {
-    setLoading(true);
+    setIsLoading(true);
     api.setProfileAvatar({avatar})
     .then((editedInfo) => {
       setCurrentUser(editedInfo);
     })
+    .then(() => closeAllPopups())
     .catch((err) => console.log(err))
     .finally(() => {
-      closeAllPopups();
-      setLoading(false);
-    })
+      setIsLoading(false);
+    });
   }
 
   function handleAddPlaceSubmit({name, link}) {
-    setLoading(true);
+    setIsLoading(true);
     api.addNewCard({name, link})
     .then((newCard) => {
       setCards([newCard, ...cards]);
     })
+    .then(() => closeAllPopups())
     .catch((err) => console.log(err))
     .finally(() => {
-      closeAllPopups();
-      setLoading(false);
+      setIsLoading(false);
     });
   }
 
@@ -85,18 +85,18 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    setLoading(true);
+    setIsLoading(true);
     api.removeCard(card._id)
     .then(() => {
       setCards(cards.filter((initialCard) => {
         return initialCard._id !== card._id;
       }))
     })
+    .then(() => closeAllPopups())
     .catch((err) => console.log(err))
     .finally(() => {
-      closeAllPopups();
-      setLoading(false);
-    })
+      setIsLoading(false);
+    });
   }
 
   useEffect(() => {
@@ -108,15 +108,15 @@ function App() {
   }, []);
 
   function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleEditAvatarClick() {
-    setEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    setAddPlacePopupOpen(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleCardClick(clickedCard) {
@@ -124,15 +124,15 @@ function App() {
   }
 
   function closeAllPopups() {
-    setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
-    setConfirmationPopupOpen(false);
+    setIsConfirmationPopupOpen(false);
   }
 
   function handleRemoveCardClick(card) {
-    setConfirmationPopupOpen(true);
+    setIsConfirmationPopupOpen(true);
     setDeletedCard(card);
   }
 

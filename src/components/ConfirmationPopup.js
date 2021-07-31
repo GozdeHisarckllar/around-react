@@ -19,6 +19,7 @@ function ConfirmationPopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       isLoading={props.isLoading}
+      isFormValid={true}
     />
   );
 }
