@@ -1,4 +1,4 @@
-export function handleValidation(element, secondElement, stateFunc, errorMessageFunc, stateButtonFunc) {
+/*export function handleValidation(element, secondElement, stateFunc, errorMessageFunc, stateButtonFunc) {
   if (!element.current.validity.valid) {
     stateFunc(false);
     errorMessageFunc(element.current.validationMessage);
@@ -16,4 +16,4 @@ export function toggleDisabledButton(element, secondElement, stateButtonFunc) {
     && secondElement.current.validity.valid) {
       stateButtonFunc(false);
   };
-}
+}*/
